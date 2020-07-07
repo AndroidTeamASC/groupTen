@@ -10,4 +10,16 @@ class UIHelper {
   );
 
   static const Color themeColor = Color.fromRGBO(255, 0, 0, 0.5);
+
+  static const List<Widget> navWidgetOption = <Widget>[
+    Text(
+      'Home',
+       style: subHeaderStyle,
+    ),
+    Text(
+      'Favourite',
+      style: subHeaderStyle,
+    )
+  ];
+  
 }
