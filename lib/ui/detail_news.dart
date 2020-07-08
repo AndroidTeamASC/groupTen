@@ -1,30 +1,30 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:news_app/models/News.dart';
-import 'package:news_app/utils/storage_service.dart';
 import 'package:news_app/utils/ui_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'bottom_navigation.dart';
 
 class DetailNews extends StatefulWidget {
+  final Articles articles;
+
+  const DetailNews({this.articles});
+
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+    return DetailsNewState(articles);
   }
 }
 
-class DetaisNewState extends State<DetailNews> {
-
+class DetailsNewState extends State<DetailNews> {
   final Articles articles;
 
-  DetaisNewState(this.articles);
-
+  DetailsNewState(this.articles);
 
   @override
   Widget build(BuildContext context) {
-    
-     return Scaffold(
+    return Scaffold(
       body: Center(
         child: Container(
             child: Column(
@@ -50,35 +50,45 @@ class DetaisNewState extends State<DetailNews> {
                 Positioned(
                   right: 0.0,
                   top: 0.0,
-                  child: IconButton(icon: Icon(Icons.favorite), 
-                  onPressed: () async {
-                    
-                    
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("Saved as Favourite!"),
-                      duration: const Duration(milliseconds: 500),
-                      ));
+                  child: IconButton(
+                      icon: Icon(Icons.favorite),
+                      onPressed: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        bool checkValue = prefs.containsKey("news");
 
-                  }),
+                        if (checkValue == false) {
+                          prefs.setString("news", jsonEncode(articles));
+
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text("Saved as Favourite!"),
+                            duration: const Duration(milliseconds: 500),
+                          ));
+                        } else {
+                          prefs.remove("news");
+                        }
+                      }),
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Column(children: [
-                SizedBox(height: 10.0),
-                Text(
-                  this.articles.description,
-                  style: UIHelper.subHeaderStyle,
+            Container(
+              child: Stack(children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(children: [
+                    SizedBox(height: 10.0),
+                    Text(
+                      this.articles.description,
+                      style: UIHelper.subHeaderStyle,
+                    ),
+                  ]),
                 ),
+                BottomNavigation(),
               ]),
-            ),
-            BottomNavigation(),
+            )
           ],
         )),
       ),
     );
   }
-
 }
-
