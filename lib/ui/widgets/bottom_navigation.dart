@@ -5,9 +5,11 @@ class BottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      onTap: (int index) {
+      },
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home)),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite)),
+        BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text('Favorite')),
       ]
     );
   }
